@@ -1,13 +1,12 @@
-OWNER:=h2o
-NAME:=deepwater
+NAME:=h2o3_deepwater_nae
 BRANCH:=$(shell git rev-parse --abbrev-ref HEAD)
 REV:=$(shell git rev-parse --short=10 HEAD)
 
 image: Dockerfile
-	docker build -t $(OWNER)-$(NAME):$(BRANCH) .
+	docker build -t $(OWNER)-$(NAME)-nae:$(BRANCH) .
 
 tag: image
-	docker tag $(OWNER)-$(NAME):$(BRANCH) opsh2oai/$(OWNER)-$(NAME):$(REV)
+	docker tag $(NAME):$(BRANCH) opsh2oai/$(NAME):$(REV)
 
 push : tag
-	docker push opsh2oai/$(OWNER)-$(NAME):$(BRANCH) && docker push opsh2oai/$(OWNER)-$(NAME):$(REV)
+	docker push opsh2oai/$(NAME):$(BRANCH) && docker push opsh2oai/$(NAME):$(REV)
