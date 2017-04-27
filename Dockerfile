@@ -84,7 +84,7 @@ RUN python3 -c 'import caffe'
 COPY caffe-files/caffe/ /opt/caffe-h2o
 
 # Copy start script
-ADD scripts/start.sh /tmp/start.sh
+ADD ./scripts/start.sh /tmp/start.sh
 RUN chmod +x /tmp/start.sh
 
 # Nimbix Integrations
