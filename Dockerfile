@@ -93,6 +93,8 @@ ADD ./NAE/AppDef.png /etc/NAE/default.png
 ADD ./NAE/screenshot.png /etc/NAE/screenshot.png
 ADD ./NAE/url.txt /etc/NAE/url.txt
 
+WORKDIR /opt
+
 EXPOSE 54321
 # Nimbix JARVICE emulation
 EXPOSE 22
@@ -101,5 +103,3 @@ RUN cp -a /tmp/image-common-master/etc /etc/JARVICE && chmod 755 /etc/JARVICE &&
 RUN mkdir -m 0755 /data && chown nimbix:nimbix /data
 RUN sed -ie 's/start on.*/start on filesystem/' /etc/init/ssh.conf
 
-USER nimbix
-CMD ["/opt/start.sh"]
