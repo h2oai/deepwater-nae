@@ -1,24 +1,21 @@
 {
-    "name": "H2O Deepwater",
-    "description": "Deep Learning in H2O using Native GPU Backends",
+    "name": "H2o Deepwater",
+    "description": "GPU-enabled Deep Learning For Smarter Applications",
     "author": "h2o.ai",
     "licensed": true,
     "classifications": [
         "Machine Learning/Deep Learning"
     ],
     "machines": [
-        "ng2",
-        "ngd2",
-        "ng5",
-        "ngd5",
-        "ng4",
-        "ngd4",
-        "ng7",
-        "ngd7",
-        "ngq7",
-        "ngo8"
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5",
+        "n32"
     ],
-    "scale_max": 1,
+    "scale_max": 16,
     "vault-types": [
         "FILE",
         "BLOCK",
@@ -26,11 +23,49 @@
         "OBJECT"
     ],
     "commands": {
+        "Batch": {
+            "path": "/bin/bash",
+            "interactive": false,
+            "name": "Batch",
+            "description": "Run a batch command using /bin/bash.  The output may be monitored directly in your web browser.",
+            "parameters": {
+                "-l": {
+                    "name": "-l",
+                    "description": "-l",
+                    "type": "CONST",
+                    "value": "-l",
+                    "positional": true,
+                    "required": true
+                },
+                "-c": {
+                    "name": "-c",
+                    "description": "-c",
+                    "type": "CONST",
+                    "value": "-c",
+                    "positional": true,
+                    "required": true
+                },
+                "command": {
+                    "name": "Command",
+                    "description": "Command to run",
+                    "type": "STR",
+                    "positional": true,
+                    "required": true
+                }
+            }
+        },
         "Server": {
             "path": "/opt/start.sh",
             "interactive": true,
-            "name": "H2o Deepwater",
-            "description": "Run the H2o Deepwater Server",
+            "name": "H2o-3",
+            "description": "Run the H2o Server",
+            "parameters": {}
+        },
+        "SSH": {
+            "path": "/sbin/init",
+            "interactive": true,
+            "name": "Server",
+            "description": "Launch a session with a SSH server, Connection address and credentials will appear in your web browser once available.",
             "parameters": {}
         }
     },
