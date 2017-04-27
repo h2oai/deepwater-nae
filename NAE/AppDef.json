@@ -7,13 +7,11 @@
         "Machine Learning/Deep Learning"
     ],
     "machines": [
-        "n0",
-        "n1",
-        "n2",
-        "n3",
-        "n4",
-        "n5",
-        "n32"
+        "ng4",
+        "ng5",
+        "ngd4",
+        "ngd5",
+        "ngo8"
     ],
     "scale_max": 16,
     "vault-types": [
@@ -57,14 +55,14 @@
         "Server": {
             "path": "/opt/start.sh",
             "interactive": true,
-            "name": "H2o-3",
+            "name": "H2o3 Server",
             "description": "Run the H2o Server",
             "parameters": {}
         },
         "SSH": {
             "path": "/sbin/init",
             "interactive": true,
-            "name": "Server",
+            "name": "SSH",
             "description": "Launch a session with a SSH server, Connection address and credentials will appear in your web browser once available.",
             "parameters": {}
         }
