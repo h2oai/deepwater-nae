@@ -27,9 +27,9 @@
     ],
     "commands": {
         "Server": {
-            "path": "/tmp/start.sh",
+            "path": "/opt/start.sh",
             "interactive": true,
-            "name": "H2o-3",
+            "name": "H2o Deepwater",
             "description": "Run the H2o Deepwater Server",
             "parameters": {}
         }

@@ -84,8 +84,8 @@ RUN python3 -c 'import caffe'
 COPY caffe-files/caffe/ /opt/caffe-h2o
 
 # Copy start script
-ADD ./scripts/start.sh /tmp/start.sh
-RUN chmod +x /tmp/start.sh
+COPY ./scripts/start.sh /opt/start.sh
+RUN chmod +x /opt/start.sh
 
 # Nimbix Integrations
 ADD ./NAE/AppDef.json /etc/NAE/AppDef.json
@@ -100,3 +100,6 @@ RUN mkdir -p /usr/lib/JARVICE && cp -a /tmp/image-common-master/tools /usr/lib/J
 RUN cp -a /tmp/image-common-master/etc /etc/JARVICE && chmod 755 /etc/JARVICE && rm -rf /tmp/image-common-master
 RUN mkdir -m 0755 /data && chown nimbix:nimbix /data
 RUN sed -ie 's/start on.*/start on filesystem/' /etc/init/ssh.conf
+
+USER nimbix
+CMD ["/opt/start.sh"]
