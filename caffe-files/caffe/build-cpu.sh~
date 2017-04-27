@@ -1,0 +1,2 @@
+tar --exclude cpu --exclude gpu -cf cpu/tensorflow.tar .
+docker build --no-cache -t h2oai/deepwater-tf:cpu cpu

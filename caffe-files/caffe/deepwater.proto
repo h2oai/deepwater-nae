@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option java_package = "hex.genmodel.algos.deepwater.caffe";
+
+package deepwater;
+
+enum Type {
+    Create = 0;
+    Train = 1;
+    Predict = 2;
+    SaveGraph = 3;
+    Save = 4;
+    Load = 5;
+    Success = 10;
+    Failure = 11;
+}
+
+message Cmd {
+    Type type = 1;
+
+    // Create
+    string graph = 100;
+    repeated int32 input_shape = 101;
+    string solver_type = 102;
+    float learning_rate = 103;
+    float momentum = 104;
+    int64 random_seed = 105;
+    bool use_gpu = 106;
+    bool regression = 107;
+
+    // MLP
+    repeated int32 sizes = 201;
+    repeated string types = 202;
+    repeated double dropout_ratios = 203;
+
+    // Train / Test
+    repeated bytes data = 300;
+
+    // Save / Load
+    string path = 400;
+}
