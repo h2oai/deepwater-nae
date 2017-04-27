@@ -28,6 +28,13 @@ RUN \
   rm -rf /var/cache/apt/* && \
   apt-get clean
 
+RUN \
+  echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" | sudo tee -a /etc/apt/sources.list && \
+  gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9 && \
+  gpg -a --export E084DAB9 | apt-key add -&& \
+  apt-get update -q -y && \
+  apt-get install -y r-base r-base-dev
+
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:/usr/local/nvidia/lib64"
 ENV CAFFE_ROOT=/opt/caffe
 
@@ -77,8 +84,11 @@ RUN python3 -c 'import caffe'
 COPY caffe-files/caffe/ /opt/caffe-h2o
 
 # Copy start script
-COPY scripts/start.sh /tmp/start.sh
+ADD scripts/start.sh /tmp/start.sh
 RUN chmod +x /tmp/start.sh
+
+# Nimbix Integrations
+ADD ./NAE/url.txt /etc/NAE/url.txt
 
 EXPOSE 54321
 # Nimbix JARVICE emulation
@@ -87,3 +97,6 @@ RUN mkdir -p /usr/lib/JARVICE && cp -a /tmp/image-common-master/tools /usr/lib/J
 RUN cp -a /tmp/image-common-master/etc /etc/JARVICE && chmod 755 /etc/JARVICE && rm -rf /tmp/image-common-master
 RUN mkdir -m 0755 /data && chown nimbix:nimbix /data
 RUN sed -ie 's/start on.*/start on filesystem/' /etc/init/ssh.conf
+
+USER nimbix
+CMD ["/tmp/start.sh"]
