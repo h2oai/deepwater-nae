@@ -88,6 +88,8 @@ ADD scripts/start.sh /tmp/start.sh
 RUN chmod +x /tmp/start.sh
 
 # Nimbix Integrations
+ADD ./NAE/AppDef.json /etc/NAE/AppDef.json
+ADD ./NAE/AppDef.png /etc/NAE/default.png
 ADD ./NAE/url.txt /etc/NAE/url.txt
 
 EXPOSE 54321
