@@ -3,7 +3,7 @@ BRANCH:=$(shell git rev-parse --abbrev-ref HEAD)
 REV:=$(shell git rev-parse --short=10 HEAD)
 
 image: Dockerfile
-	docker build -t $(OWNER)-$(NAME)-nae:$(BRANCH) .
+	docker build -t $(NAME):$(BRANCH) .
 
 tag: image
 	docker tag $(NAME):$(BRANCH) opsh2oai/$(NAME):$(REV)
