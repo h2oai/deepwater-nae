@@ -1,5 +1,5 @@
 {
-    "name": "H2o Deepwater",
+    "name": "H2o3 Deepwater",
     "description": "GPU-enabled Deep Learning For Smarter Applications",
     "author": "h2o.ai",
     "licensed": true,
@@ -52,11 +52,18 @@
                 }
             }
         },
-        "Server": {
-            "path": "/opt/start.sh",
+        "H2o3 Deepwater": {
+            "path": "/opt/start-cluster.sh",
             "interactive": true,
-            "name": "H2o3 Server",
+            "name": "H2o3 Deepwater Server",
             "description": "Run the H2o Server",
+            "parameters": {}
+        },
+        "Jupyter": {
+            "path": "/usr/local/bin/nimbix_notebook",
+            "interactive": true,
+            "name": "Jupyter Notebook",
+            "description": "Launch Jupyter Notebook, Connection address and credentials will appear in your web browser once available.",
             "parameters": {}
         },
         "SSH": {
