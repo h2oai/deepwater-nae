@@ -60,14 +60,18 @@ RUN \
     libopencv-dev \
     libprotobuf-dev \
     libsnappy-dev \
-    protobuf-compiler \
-    python-dev && \
-    python-pip && \
-    python-numpy && \
-    python-sklearn && \
-    python-skimage && \
-    python-scipy && \
-    python-setuptools && \
+    protobuf-compiler
+
+
+RUN \
+  apt-get install -y \
+    python-dev \
+    python-pip \
+    python-numpy \
+    python-sklearn \
+    python-skimage \
+    python-scipy \
+    python-setuptools \
     python3 \
     python3-dev \
     python3-numpy \
@@ -85,10 +89,10 @@ RUN \
   rm -rf /var/cache/apt/*
 
 # Install RStudio
-RUN \
-  wget https://download2.rstudio.org/rstudio-server-1.0.143-amd64.deb && \
-  gdebi -n rstudio-server-1.0.143-amd64.deb && \
-  rm rstudio-server-1.0.143-amd64.deb
+#RUN \
+#  wget https://download2.rstudio.org/rstudio-server-1.0.143-amd64.deb && \
+#  gdebi -n rstudio-server-1.0.143-amd64.deb && \
+#  rm rstudio-server-1.0.143-amd64.deb
 
 # Get R
 #RUN \
@@ -105,15 +109,17 @@ RUN \
 RUN \
   mkdir /opt/caffe && \
   cd /opt && \
-  pip3 install --upgrade pip && \
+#  pip3 install --upgrade pip && \
+  pip2 install --upgrade pip && \
   wget http://s3.amazonaws.com/h2o-deepwater/public/nightly/latest/h2o.jar && \ 
   wget http://s3.amazonaws.com/h2o-deepwater/public/nightly/latest/deepwater-all.jar  && \
   wget http://s3.amazonaws.com/h2o-deepwater/public/nightly/latest/mxnet-0.7.0-py2.7.egg && \
   wget http://s3.amazonaws.com/h2o-deepwater/public/nightly/latest/h2o-latest-py2.py3-non-any.whl && \
   wget https://s3.amazonaws.com/h2o-deepwater/public/nightly/latest/xgboost4j-0.7-jar-with-dependencies.jar && \
-  wget http://s3.amazonaws.com/h2o-deepwater/public/nightly/latest/tensorflow-1.1.0rc0-cp27-cp27mu-linux_x86_64.whl && \
-  easy_install mxnet-0.7.0-py2.7.egg && \
-  easy_install tensorflow-1.1.0rc0-cp27-cp27mu-linux_x86_64.whl
+  wget http://s3.amazonaws.com/h2o-deepwater/public/nightly/latest/tensorflow-1.1.0rc0-cp27-cp27mu-linux_x86_64.whl
+#  easy_install mxnet-0.7.0-py2.7.egg && \
+#  pip3 install tensorflow-1.1.0rc0-cp27-cp27mu-linux_x86_64.whl && \
+#  pip2 install tensorflow-1.1.0rc0-cp27-cp27mu-linux_x86_64.whl
 
 # Setup ENV
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:/usr/local/nvidia/lib64"
