@@ -13,7 +13,7 @@
         "ngd5",
         "ngo8"
     ],
-    "scale_max": 16,
+    "scale_max": 1,
     "vault-types": [
         "FILE",
         "BLOCK",

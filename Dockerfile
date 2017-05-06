@@ -38,7 +38,6 @@ RUN \
   echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
   echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
 
-
 RUN \
   apt-get -y install \  
     r-base \
@@ -101,15 +100,6 @@ RUN \
     urllib3 \
     keras
 
-# Pip Installs
-RUN \
-  pip3 install --upgrade \
-    pycuda \
-    graphviz \
-    urllib3 \
-    keras && \
-  pip3 install https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp35-cp35m-linux_x86_64.whl
-
 # Setup ENV
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH"
 ENV CAFFE_ROOT=/opt/caffe
@@ -141,7 +131,6 @@ RUN \
         -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.5m.so \
         -DBoost_PYTHON_LIBRARY_DEBUG=/usr/lib/x86_64-linux-gnu/libboost_python-py35.so \
         -DBoost_PYTHON_LIBRARY_RELEASE=/usr/lib/x86_64-linux-gnu/libboost_python-py35.so \
-        -Wno-deprecated-gpu-targets \
    cd .. && \
    make -j"$(nproc)" && \
    echo "$CAFFE_ROOT/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig
@@ -151,12 +140,10 @@ RUN \
   pip3 install --upgrade python-dateutil && \
   python3 -c 'import caffe'
 
-
-# get latest files
+# Get latest files
 RUN \
   mkdir -p /opt/dist && \
   cd /opt/dist && \
-# download from s3
   wget -q http://s3.amazonaws.com/h2o-deepwater/public/nightly/latest/deepwater-master.tgz && \
   tar xfz deepwater-master.tgz && \
   rm deepwater-master.tgz && \
@@ -164,6 +151,7 @@ RUN \
   tar xfz deepwater-h2o.tgz && \
   rm deepwater-h2o.tgz
 
+# Install Wheels
 RUN \
   apt-get install python-wheel-common && \
   wheel convert `find . -name "mxnet*.egg"` && \
