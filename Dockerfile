@@ -46,11 +46,10 @@ RUN \
 
 # Install apt-get dependancies and repos
 RUN \
-  apt-get install --no-install-recommends -y \
+  apt-get install -y \
     subversion \
     gdebi-core \
     apt-utils \
-    libboost-all-dev \
     libgflags-dev \
     libgoogle-glog-dev \
     libhdf5-serial-dev \
@@ -59,27 +58,23 @@ RUN \
     libopencv-dev \
     libprotobuf-dev \
     libsnappy-dev \
-    protobuf-compiler 
+    libopenblas-dev \
+    libatlas-base-dev \
+    protobuf-compiler \
+    doxygen 
+
+RUN \
+  apt-get install -y --no-install-recommends \
+    libboost-all-dev
 
 RUN \
   apt-get install -y \
     python-dev \
     python-pip \
-    python-numpy \
-    python-sklearn \
-    python-skimage \
-    python-scipy \
     python-setuptools \
-    python-matplotlib \
     python3 \
     python3-dev \
-    python3-numpy \
-    python3-pip \
-    python3-setuptools \
-    python3-sklearn \
-    python3-skimage \
-    python3-matplotlib \
-    python3-scipy \
+    python3-setuptools 
 
 # Install Oracle 8 JDK  
 RUN \  
@@ -96,7 +91,6 @@ RUN \
   pip3 install --upgrade pip && \
   pip3 install https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp35-cp35m-linux_x86_64.whl && \
   pip3 install \
-    python-dateutil \
     pycuda \
     graphviz \
     urllib3 \
@@ -106,6 +100,15 @@ RUN \
     graphviz \
     urllib3 \
     keras
+
+# Pip Installs
+RUN \
+  pip3 install --upgrade \
+    pycuda \
+    graphviz \
+    urllib3 \
+    keras && \
+  pip3 install https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp35-cp35m-linux_x86_64.whl
 
 # Setup ENV
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH"
@@ -119,40 +122,35 @@ RUN \
   git clone https://github.com/h2oai/steam.git
 
 # install Caffe
+# caffe files alread in /opt/caffe
+COPY caffe-files/caffe/ /opt/caffe-h2o
+
 WORKDIR $CAFFE_ROOT
-RUN git clone -b 1.0 --depth 1 https://github.com/BVLC/caffe.git . && \
-    cd python && for req in $(cat requirements.txt) pydot; do pip3 install $req; done && cd .. && \
-    git clone https://github.com/NVIDIA/nccl.git && \
-    cd nccl && \
-    make -j install && \
-    cd .. && \
-    rm -rf nccl && \
-    mkdir build && cd build && \
-    cmake -DUSE_CUDNN=1 -DUSE_NCCL=1 \
+RUN \
+  git clone -b 1.0 --depth 1 https://github.com/BVLC/caffe.git . && \
+  cd python && for req in $(cat requirements.txt) pydot; do pip3 install $req; done && cd .. && \
+  git clone https://github.com/NVIDIA/nccl.git && \
+  cd nccl && \
+  make -j install && \
+  cd .. && \
+  rm -rf nccl && \
+  mkdir build && cd build && \
+  cmake -DUSE_CUDNN=1 -DUSE_NCCL=1 \
         -DPYTHON_EXECUTABLE=/usr/bin/python3 \
         -DPYTHON_INCLUDE_DIR=/usr/include/python3.5 \
         -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.5m.so \
         -DBoost_PYTHON_LIBRARY_DEBUG=/usr/lib/x86_64-linux-gnu/libboost_python-py35.so \
         -DBoost_PYTHON_LIBRARY_RELEASE=/usr/lib/x86_64-linux-gnu/libboost_python-py35.so \
         -Wno-deprecated-gpu-targets \
-        cd .. && \
-        make -j"$(nproc)" && \
-  echo "$CAFFE_ROOT/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig &&\
+   cd .. && \
+   make -j"$(nproc)" && \
+   echo "$CAFFE_ROOT/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig
+
+RUN \
+  pip install --upgrade python-dateutil && \
+  pip3 install --upgrade python-dateutil && \
   python3 -c 'import caffe'
 
-# caffe files alread in /opt/caffe
-COPY caffe-files/caffe/ /opt/caffe-h2o
-
-# Pip Installs
-RUN \
-  pip3 uninstall -y python-dateutil && \
-  pip3 install \
-    python-dateutil \
-    pycuda \
-    graphviz \
-    urllib3 \
-    keras && \
-  pip3 install https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp35-cp35m-linux_x86_64.whl
 
 # get latest files
 RUN \
@@ -164,13 +162,17 @@ RUN \
   rm deepwater-master.tgz && \
   wget -q http://s3.amazonaws.com/h2o-deepwater/public/nightly/latest/deepwater-h2o.tgz && \
   tar xfz deepwater-h2o.tgz && \
-  rm deepwater-h2o.tgz && \
-# install
-  pip2 install tensorflow-*.whl && \
-  easy_install mxnet-*.egg && \
-  pip2 install h2o-*.whl && \
-  pip3 install h2o-*.whl && \
-  R CMD INSTALL h2o_*.tar.gz && \
+  rm deepwater-h2o.tgz
+
+RUN \
+  apt-get install python-wheel-common && \
+  wheel convert `find . -name "mxnet*.egg"` && \
+  pip2 install `find . -name "mxnet*.whl"` && \
+  pip2 install `find . -name "tensorflow*.whl"` && \
+  pip2 install `find . -name "h2o*.whl"` && \
+  pip3 install `find . -name "h2o*.whl"`
+
+RUN \
   cd /opt && \
   ln -s dist/h2o.jar .
 
