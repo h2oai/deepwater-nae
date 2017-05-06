@@ -40,7 +40,7 @@ RUN \
 
 
 RUN \
-  apt-get install \  
+  apt-get -y install \  
     r-base \
     r-base-dev
 
