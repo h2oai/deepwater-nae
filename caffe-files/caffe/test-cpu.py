@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from multiprocessing import *
 from solver import *
 import numpy as np
@@ -27,11 +29,11 @@ for i in range(10):
     batch = np.zeros([cmd.batch_size, 1, 1, cmd.sizes[0]], dtype = np.float32)
     label = np.zeros([cmd.batch_size, 1], dtype = np.float32)
 
-    print >> sys.stderr, 'map', (batch.shape, label.shape)
+    print('map', (batch.shape, label.shape), file=sys.stderr)
     tmp = zip(np.split(batch, size), np.split(label, size))
-    print [(x[0].shape, x[1].shape) for x in tmp]
+    print([(x[0].shape, x[1].shape) for x in tmp])
     pool.map(train, tmp)
 
 r = pool.map(predict, np.split(batch, size))
 r = np.concatenate(r)
-print r.shape
+print(r.shape)
